@@ -19,7 +19,13 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "packageManager": "npm",
+        "afterExtract": [
+          "./src/build/afterExtract.js"
+        ],
+        "overwrite": true
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -85,6 +91,7 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "tree-kill": "^1.2.2"
   }
 }

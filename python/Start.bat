@@ -1,0 +1,1 @@
+cd dist\edtwExample && edtwExample.exe runserver  --settings=edtwExample.settings.prod --noreload

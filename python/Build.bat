@@ -1,0 +1,1 @@
+pyinstaller --name=edtwExample edtwExample\manage.py --noconfirm
