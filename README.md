@@ -8,7 +8,7 @@
 <!-- omit in toc -->
 ## Table of Content
 - [Requirements](#requirements)
-- [**Installation**](#installation)
+- [Installation](#installation)
 - [Package](#package)
 - [Run](#run)
 ## Requirements
@@ -16,7 +16,7 @@
 - Virtualenv 20.13.1
 - Node js 14.18.3
 
-## **Installation**
+## Installation
 ```cmd
 npm install
 
