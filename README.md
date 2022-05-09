@@ -3,12 +3,12 @@
 
 <!-- omit in toc -->
 ## Detail Guide
-<!-- TODO: Publish the blog and paste the link here -->
+[Electron + Django, package it to production](https://ivanyu2021.hashnode.dev/electron-django-package-it-to-production)
 
 <!-- omit in toc -->
 ## Table of Content
 - [Requirements](#requirements)
-- [Installation](#installation)
+- [**Installation**](#installation)
 - [Package](#package)
 - [Run](#run)
 ## Requirements
@@ -16,7 +16,7 @@
 - Virtualenv 20.13.1
 - Node js 14.18.3
 
-## Installation
+## **Installation**
 ```cmd
 npm install
 
