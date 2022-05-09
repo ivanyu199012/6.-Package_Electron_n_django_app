@@ -90,3 +90,4 @@ out/
 python/dist/
 python/build/
 **/__pycache__/
+python/edtwExample.spec
