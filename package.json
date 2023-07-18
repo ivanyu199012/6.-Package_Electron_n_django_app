@@ -9,7 +9,7 @@
 		"node": ">=16"
 	},
 	"scripts": {
-		"start": "electron-forge start",
+		"start": "NODE_ENV=development electron-forge start",
 		"package": "electron-forge package",
 		"make": "electron-forge make",
 		"publish": "electron-forge publish",

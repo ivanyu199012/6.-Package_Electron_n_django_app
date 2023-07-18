@@ -1,16 +1,25 @@
-// const packager = require('electron-packager');
 const { serialHooks } = require('electron-packager/src/hooks');
 const fs = require('fs-extra');
 const path = require('path');
 
+const projectName = 'edtwExample';
+
 module.exports = {
   packagerConfig: {
-    afterExtract: [
+    afterComplete: [
       serialHooks([
         // eslint-disable-next-line no-unused-vars
-        async (extractPath, electronVersion, platform, arch) => {
-          console.log({ extractPath });
-          await fs.copy('./python/dist/edtwExample', path.join(extractPath, 'python'));
+        async (builtPath, electronVersion, platform, arch) => {
+          console.log({ builtPath: builtPath });
+          if (platform === 'darwin') {
+            await fs.copy(
+              path.join(process.cwd(), 'python', 'dist', projectName),
+              path.join(builtPath, `${projectName}.app`, 'Contents', 'Resources', 'python')
+            );
+          } else {
+            // handle for other platforms as well
+            await fs.copy(path.join(process.cwd(), 'python', 'dist', projectName), path.join(builtPath, 'python'));
+          }
           console.log('New: Finished Copy Python Folder');
         }
       ])
@@ -20,13 +29,13 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        name: 'edtwexample'
+        name: projectName
       }
     },
     {
       name: '@electron-forge/maker-dmg',
       config: {
-        name: 'edtwexample',
+        name: projectName,
         overwrite: true
       }
     },

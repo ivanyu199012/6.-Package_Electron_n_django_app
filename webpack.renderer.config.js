@@ -3,15 +3,15 @@ const plugins = require('./webpack.plugins');
 
 rules.push({
   test: /\.css$/,
-  use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+  use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
 });
 
 module.exports = {
   module: {
-    rules,
+    rules
   },
   plugins: plugins,
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
-  },
+    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css']
+  }
 };

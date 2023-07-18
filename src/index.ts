@@ -3,7 +3,7 @@ import { app, BrowserWindow } from 'electron';
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import kill from 'tree-kill';
 import * as path from 'path';
-import { platform } from 'node:process';
+import { platform, cwd, env } from 'node:process';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 let DJANGO_CHILD_PROCESS: ChildProcessWithoutNullStreams = null;
@@ -26,23 +26,27 @@ const UpsertKeyValue = (obj: Record<string, any>, keyToChange: string, value: st
 };
 
 const isDevelopmentEnv = () => {
-  console.log(`NODE_ENV=${process.env.NODE_ENV}`);
-  return process.env.NODE_ENV === 'development';
+  console.log(`NODE_ENV=${env.NODE_ENV}`);
+  return env.NODE_ENV === 'development';
 };
 
 const spawnDjango = () => {
   if (isDevelopmentEnv()) {
     return spawn(
-      path.join('python', 'venv', 'bin', 'python'),
+      path.join(cwd(), 'python', 'venv', 'bin', 'python'),
       [path.join('python', 'edtwExample', 'manage.py'), 'runserver', '--noreload'],
       {
         shell: true
       }
     );
   }
-  return spawn('./python/edtwExample runserver --settings=edtwExample.settings.prod --noreload', {
-    shell: true
-  });
+  return spawn(
+    path.join(app.getAppPath(), '..', 'python', 'edtwExample'),
+    ['runserver', '--settings=edtwExample.settings.prod', '--noreload'],
+    {
+      shell: true
+    }
+  );
 };
 const startDjangoServer = () => {
   DJANGO_CHILD_PROCESS = spawnDjango();
@@ -53,7 +57,7 @@ const startDjangoServer = () => {
     console.log(`stderr: ${data}`);
   });
   DJANGO_CHILD_PROCESS.on('error', (error) => {
-    console.log(`error: ${error.message}`);
+    console.error(`error: ${error.message}`);
   });
   DJANGO_CHILD_PROCESS.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
