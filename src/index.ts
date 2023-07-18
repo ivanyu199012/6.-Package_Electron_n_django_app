@@ -2,6 +2,8 @@
 import { app, BrowserWindow } from 'electron';
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import kill from 'tree-kill';
+import * as path from 'path';
+import { platform } from 'node:process';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 let DJANGO_CHILD_PROCESS: ChildProcessWithoutNullStreams = null;
@@ -31,15 +33,15 @@ const isDevelopmentEnv = () => {
 const spawnDjango = () => {
   if (isDevelopmentEnv()) {
     return spawn(
-      'python\\edtwExampleEnv\\Scripts\\python.exe',
-      ['python\\edtwExample\\manage.py', 'runserver', '--noreload'],
+      path.join('python', 'venv', 'bin', 'python'),
+      [path.join('python', 'edtwExample', 'manage.py'), 'runserver', '--noreload'],
       {
-        shell: true,
-      },
+        shell: true
+      }
     );
   }
-  return spawn('cd python && edtwExample.exe runserver --settings=edtwExample.settings.prod --noreload', {
-    shell: true,
+  return spawn('./python/edtwExample runserver --settings=edtwExample.settings.prod --noreload', {
+    shell: true
   });
 };
 const startDjangoServer = () => {
@@ -74,23 +76,21 @@ const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 600,
-    width: 800,
+    width: 800
   });
 
-  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-    (details, callback) => {
-      const { requestHeaders } = details;
-      UpsertKeyValue(requestHeaders, 'Access-Control-Allow-Origin', ['*']);
-      callback({ requestHeaders });
-    },
-  );
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+    const { requestHeaders } = details;
+    UpsertKeyValue(requestHeaders, 'Access-Control-Allow-Origin', ['*']);
+    callback({ requestHeaders });
+  });
 
   mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
     const { responseHeaders } = details;
     UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Origin', ['*']);
     UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Headers', ['*']);
     callback({
-      responseHeaders,
+      responseHeaders
     });
   });
 
@@ -104,7 +104,7 @@ const createWindow = (): void => {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (platform !== 'darwin') {
     app.quit();
   }
   kill(DJANGO_CHILD_PROCESS.pid);

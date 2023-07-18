@@ -16,15 +16,43 @@
         "airbnb-typescript",
         "plugin:import/recommended",
         "plugin:import/electron",
-        "plugin:import/typescript"
-      ]
+        "plugin:import/typescript",
+        "prettier"
+      ],
+      "plugins": ["prettier"],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "trailingComma": "none",
+            "tabWidth": 2,
+            "semi": true,
+            "singleQuote": true,
+            "endOfLine": "auto"
+          }
+        ]
+      }
     },
     {
       "files": ["*.js"],
       "extends": [
         "eslint:recommended",
-        "plugin:import/recommended"
-      ]
+        "plugin:import/recommended",
+        "prettier"
+      ],
+      "plugins": ["prettier"],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "trailingComma": "none",
+            "tabWidth": 2,
+            "semi": true,
+            "singleQuote": true,
+            "endOfLine": "auto"
+          }
+        ]
+      }
     }
   ]
 }
