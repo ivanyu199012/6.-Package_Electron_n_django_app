@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 import { app, BrowserWindow } from 'electron';
-import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import { spawn, ChildProcess } from 'child_process';
 import kill from 'tree-kill';
 import * as path from 'path';
 import { platform, cwd, env } from 'node:process';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
-let DJANGO_CHILD_PROCESS: ChildProcessWithoutNullStreams = null;
+let DJANGO_CHILD_PROCESS: ChildProcess = null;
 
 // eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) {
@@ -36,7 +36,8 @@ const spawnDjango = () => {
       path.join(cwd(), 'python', 'venv', 'bin', 'python'),
       [path.join('python', 'edtwExample', 'manage.py'), 'runserver', '--noreload'],
       {
-        shell: true
+        shell: true,
+        stdio: [0, 'pipe', 'pipe']
       }
     );
   }
@@ -51,20 +52,20 @@ const spawnDjango = () => {
 const startDjangoServer = () => {
   DJANGO_CHILD_PROCESS = spawnDjango();
   DJANGO_CHILD_PROCESS.stdout.on('data', (data) => {
-    console.log(`stdout:\n${data}`);
+    console.log(`stdout: ${data}`);
   });
   DJANGO_CHILD_PROCESS.stderr.on('data', (data) => {
     console.log(`stderr: ${data}`);
   });
   DJANGO_CHILD_PROCESS.on('error', (error) => {
-    console.error(`error: ${error.message}`);
-  });
-  DJANGO_CHILD_PROCESS.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-  });
-  DJANGO_CHILD_PROCESS.on('message', (message) => {
-    console.log(`stdout:\n${message}`);
-  });
+    console.error(`[ERROR] ${error.message}`);
+  })
+    .on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+    })
+    .on('message', (message) => {
+      console.log(`stdout: ${message}`);
+    });
   return DJANGO_CHILD_PROCESS;
 };
 
@@ -79,8 +80,8 @@ const createWindow = (): void => {
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800
+    height: 768,
+    width: 1024
   });
 
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
