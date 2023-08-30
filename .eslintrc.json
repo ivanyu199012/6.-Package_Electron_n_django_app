@@ -4,13 +4,55 @@
     "es6": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:import/recommended",
-    "plugin:import/electron",
-    "plugin:import/typescript"
-  ],
-  "parser": "@typescript-eslint/parser"
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "extends": [
+        "eslint:recommended",
+        "airbnb",
+        "airbnb-typescript",
+        "plugin:import/recommended",
+        "plugin:import/electron",
+        "plugin:import/typescript",
+        "prettier"
+      ],
+      "plugins": ["prettier"],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "trailingComma": "none",
+            "tabWidth": 2,
+            "semi": true,
+            "singleQuote": true,
+            "endOfLine": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.js"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:import/recommended",
+        "prettier"
+      ],
+      "plugins": ["prettier"],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "trailingComma": "none",
+            "tabWidth": 2,
+            "semi": true,
+            "singleQuote": true,
+            "endOfLine": "auto"
+          }
+        ]
+      }
+    }
+  ]
 }
